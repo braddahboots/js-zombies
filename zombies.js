@@ -329,6 +329,13 @@ Player.prototype.equippedWith = function() {
  * @property {boolean} isAlive      Default value should be `true`.
  */
 
+function Zombie(health, strength, speed) {
+  this._maxHealth = health;
+  this.health = health;
+  this.strength = strength;
+  this.speed = speed;
+  this.isAlive = true;
+}
 
 /**
  * Class => FastZombie(health, strength, speed)
@@ -345,13 +352,20 @@ Player.prototype.equippedWith = function() {
  * @param {number} speed            The zombie's speed.
  */
 
+function FastZombie(health, strength, speed) {
+  Zombie.call(this, health, strength, speed);
+}
 
 /**
  * FastZombie Extends Zombie Class
  * -----------------------------
  */
 
-
+FastZombie.prototype = Object.create(Zombie.prototype, {
+  constructor: {
+    value: FastZombie
+  }
+});
 
 /**
  * Class => StrongZombie(health, strength, speed)
@@ -368,12 +382,20 @@ Player.prototype.equippedWith = function() {
  * @param {number} speed            The zombie's speed.
  */
 
+function StrongZombie(health, strength, speed) {
+  Zombie.call(this, health, strength, speed);
+}
 
 /**
  * StrongZombie Extends Zombie Class
  * -----------------------------
  */
 
+StrongZombie.prototype = Object.create(Zombie.prototype, {
+  constructor: {
+    value: StrongZombie
+  }
+});
 
 
 /**
@@ -391,13 +413,19 @@ Player.prototype.equippedWith = function() {
  * @param {number} speed            The zombie's speed.
  */
 
+function RangedZombie(health, strength, speed) {
+  Zombie.call(this, health, strength, speed);
+}
 
 /**
  * StrongZombie Extends Zombie Class
  * -----------------------------
  */
-
-
+RangedZombie.prototype = Object.create(Zombie.prototype, {
+  constructor: {
+    value: StrongZombie
+  }
+});
 
 /**
  * Class => ExplodingZombie(health, strength, speed)
@@ -414,13 +442,20 @@ Player.prototype.equippedWith = function() {
  * @param {number} speed            The zombie's speed.
  */
 
+function ExplodingZombie(health, strength, speed) {
+  Zombie.call(this, health, strength, speed)
+}
 
 /**
  * ExplodingZombie Extends Zombie Class
  * -----------------------------
  */
 
-
+ExplodingZombie.prototype = Object.create(Zombie.prototype, {
+  constructor: {
+    value: ExplodingZombie
+  }
+});
 
 
 /**
