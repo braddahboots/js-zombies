@@ -33,18 +33,18 @@ function Weapon(name, damage) {
   Item.call(this, name);
 }
 
-Weapon.prototype = Object.create(Item.prototype, {
-  constructor: {
-    value: Weapon
-  }
-});
+
 
 /**
  * Weapon Extends Item Class
  * -----------------------------
  */
 
-
+Weapon.prototype = Object.create(Item.prototype, {
+  constructor: {
+    value: Weapon
+  }
+});
 
 /**
  * Class => Food(name, energy)
@@ -62,13 +62,21 @@ Weapon.prototype = Object.create(Item.prototype, {
  * @property {number} energy
  */
 
+function Food(name, energy) {
+  this.energy = energy;
+  Item.call(this, name);
+}
 
 /**
  * Food Extends Item Class
  * -----------------------------
  */
 
-
+Food.prototype = Object.create(Item.prototype, {
+  constructor: {
+    value: Food
+  }
+});
 
 /**
  * Class => Player(name, health, strength, speed)
@@ -92,6 +100,24 @@ Weapon.prototype = Object.create(Item.prototype, {
  * @property {method} getMaxHealth         Returns private variable `maxHealth`.
  */
 
+function Player(name, health, strength, speed) {
+  this._pack = [];
+  this._maxHealth = health;
+  this.name = name;
+  this.health = health;
+  this.strength = strength;
+  this.speed = speed;
+  this.isAlive = true;
+  this.equipped = false;
+}
+
+Player.prototype.getPack = function() {
+  return this._pack;
+};
+
+Player.prototype.getMaxHealth = function() {
+  return this._maxHealth;
+};
 
 /**
  * Player Class Method => checkPack()
@@ -104,6 +130,10 @@ Weapon.prototype = Object.create(Item.prototype, {
  *
  * @name checkPack
  */
+
+Player.prototype.checkPack = function() {
+  console.log(this.getPack());
+};
 
 
 /**
@@ -124,6 +154,17 @@ Weapon.prototype = Object.create(Item.prototype, {
  * @return {boolean} true/false     Whether player was able to store item in pack.
  */
 
+Player.prototype.takeItem = function(item) {
+  //this.getPack can only have a max <= 3 items. if they have more then it returns false
+  var purse = this.getPack();
+  if(purse.length < 3) {
+    console.log(this.name + this.checkPack);
+    purse.push(item);
+  } else {
+    console.log('Purse is full, remove other items to store');
+  }
+  //before return of boolean, print - name and items else print "pack is full"
+};
 
 /**
  * Player Class Method => discardItem(item)
@@ -151,6 +192,19 @@ Weapon.prototype = Object.create(Item.prototype, {
  * @return {boolean} true/false     Whether player was able to remove item from pack.
  */
 
+Player.prototype.discardItem = function(item) {
+  var purse = this.getPack();
+  var index = purse.indexOf(item);
+
+  if(index >= 0) {
+    purse.splice(index, 1);
+    console.log(this.name + ' Removed item from purse ');
+    return true;
+  } else {
+    console.log(item + ' No items were removed ');
+    return false;
+  }
+};
 
 /**
  * Player Class Method => equip(itemToEquip)
@@ -172,6 +226,18 @@ Weapon.prototype = Object.create(Item.prototype, {
  * @param {Weapon} itemToEquip  The weapon item to equip.
  */
 
+Player.prototype.equip = function(itemToEquip) {
+  //Player can equip Weapon
+  if(itemToEquip instanceof Weapon && this.discardItem(itemToEquip)){
+    if(!this.equipped) {
+      this.equipped = itemToEquip;
+    } else {
+      this.takeItem(this.equipped);
+      this.equipped = itemToEquip;
+    }
+  }
+  //If player has weapon equiped - find itemToEquip in pack and replace it with current equiped item.
+};
 
 /**
  * Player Class Method => eat(itemToEat)
